@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#160b22">
+<title>♡</title>
+<style>
+  *{box-sizing:border-box}
+  html,body{margin:0;width:100%;height:100%;overflow:hidden}
+  body{
+    background:radial-gradient(ellipse at 50% 72%,#492044 0%,#24102f 42%,#100817 100%);
+    color:#fff; font-family:system-ui,sans-serif; user-select:none; -webkit-tap-highlight-color:transparent;
+  }
+  canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+  .scene{position:relative;width:100%;height:100%;overflow:hidden;isolation:isolate}
+  .glow{position:absolute;width:min(78vw,520px);height:min(78vw,520px);left:50%;top:52%;transform:translate(-50%,-50%);border-radius:50%;background:#ff4c9a;filter:blur(90px);opacity:.15;animation:glow 4s ease-in-out infinite alternate}
+  .moon{position:absolute;top:8%;left:12%;width:42px;height:42px;border-radius:50%;background:#fff0d9;box-shadow:0 0 30px #ffd7ec,0 0 90px #ff84c6;opacity:.8}
+  .moon:after{content:"";position:absolute;top:-6px;left:13px;width:40px;height:40px;border-radius:50%;background:#170b22}
+  .bouquet{position:absolute;left:50%;top:48%;width:min(90vw,440px);height:min(82vh,610px);transform:translate(-50%,-50%);filter:drop-shadow(0 22px 35px #09030d88);animation:arrive 1.8s cubic-bezier(.16,1,.3,1) both}
+  .flower{position:absolute;width:var(--s);height:var(--s);left:var(--x);top:var(--y);transform:translate(-50%,-50%) rotate(var(--r));animation:sway var(--d) ease-in-out infinite alternate;transform-origin:50% 85%}
+  .petals{position:absolute;inset:0;animation:turn var(--spin) linear infinite}
+  .petal{position:absolute;left:50%;top:50%;width:34%;height:48%;border-radius:60% 60% 48% 48%;transform-origin:50% 100%;transform:translate(-50%,-100%) rotate(var(--a));background:radial-gradient(ellipse at 40% 25%,#fff7fb 0%,var(--c1) 28%,var(--c2) 76%,var(--c3) 100%);box-shadow:inset -2px -4px 7px #6b174544,0 0 10px #ff9bc433}
+  .center{position:absolute;left:50%;top:50%;width:24%;height:24%;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff3a6,#ffbd46 45%,#b95038 100%);box-shadow:0 0 12px #ffcb7a}
+  .stem{position:absolute;left:50%;top:53%;width:5px;height:44%;border-radius:9px;background:linear-gradient(90deg,#18452d,#4a9c61,#1d4b30);transform:translateX(-50%) rotate(var(--stemrot));transform-origin:top}
+  .leaf{position:absolute;left:50%;top:67%;width:28%;height:12%;background:linear-gradient(135deg,#5fb879,#17482e);border-radius:100% 0 100% 0;transform:translateX(-4%) rotate(var(--leafrot));box-shadow:inset 0 1px 2px #b6ffc777}
+  .wrap{position:absolute;left:50%;bottom:1%;width:47%;height:36%;transform:translateX(-50%);clip-path:polygon(10% 0,90% 0,100% 100%,0 100%);background:linear-gradient(100deg,#6b174b,#ed76ad 28%,#9d2f68 54%,#f7a4c8 77%,#641541);opacity:.94}
+  .wrap:after{content:"";position:absolute;inset:0;background:linear-gradient(120deg,transparent 38%,#fff5 39%,transparent 42%,transparent 68%,#fff4 69%,transparent 73%)}
+  .ribbon{position:absolute;left:50%;bottom:15%;width:48%;height:8%;transform:translateX(-50%);background:linear-gradient(#ffcee4,#e35b9d,#8f1d59);clip-path:polygon(0 0,100% 0,92% 100%,58% 72%,50% 100%,42% 72%,8% 100%)}
+  .heart{position:absolute;color:#ff77b7;text-shadow:0 0 12px #ff4c9a,0 0 30px #ff4c9a;animation:floatHeart linear infinite;opacity:0;pointer-events:none}
+  .hint{position:absolute;inset:0;cursor:pointer;z-index:5}
+  .pulse{position:absolute;left:50%;top:50%;width:30px;height:30px;border:1px solid #ffb7d8;border-radius:50%;transform:translate(-50%,-50%);opacity:0;animation:ripple 3s ease-out infinite}
+  .petal-fall{position:absolute;top:-10%;font-size:20px;animation:fall linear infinite;opacity:0;filter:drop-shadow(0 0 8px #ff79b7)}
+  .spark{position:absolute;width:4px;height:4px;border-radius:50%;background:#fff6d9;box-shadow:0 0 9px 3px #ff9ed2;animation:twinkle 2s ease-in-out infinite}
+  @keyframes glow{to{opacity:.28;transform:translate(-50%,-50%) scale(1.2)}}
+  @keyframes arrive{from{opacity:0;transform:translate(-50%,-43%) scale(.72)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+  @keyframes sway{from{rotate:-5deg}to{rotate:5deg}}
+  @keyframes turn{to{transform:rotate(360deg)}}
+  @keyframes floatHeart{0%{opacity:0;transform:translateY(20px) scale(.55) rotate(-15deg)}15%{opacity:.95}85%{opacity:.8}100%{opacity:0;transform:translateY(-110vh) scale(1.25) rotate(20deg)}}
+  @keyframes ripple{0%{width:20px;height:20px;opacity:.65}100%{width:220px;height:220px;opacity:0}}
+  @keyframes fall{0%{opacity:0;transform:translate3d(0,-10vh,0) rotate(0)}10%{opacity:.8}90%{opacity:.65}100%{opacity:0;transform:translate3d(70px,115vh,0) rotate(420deg)}}
+  @keyframes twinkle{0%,100%{opacity:.15;transform:scale(.5)}50%{opacity:1;transform:scale(1.5)}}
+  @media(max-height:600px){.bouquet{height:94vh;width:min(74vw,340px);top:50%}.moon{top:5%}}
+  @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:10s!important}}
+</style>
+</head>
+<body>
+<div class="scene" id="scene">
+  <canvas id="stars"></canvas><div class="glow"></div><div class="moon"></div>
+  <div class="bouquet" id="bouquet" aria-label="Bó hoa và trái tim">
+    <div class="stem" style="--stemrot:-23deg;height:48%;left:36%;top:46%"></div>
+    <div class="stem" style="--stemrot:-10deg;height:52%;left:44%;top:44%"></div>
+    <div class="stem" style="--stemrot:8deg;height:51%;left:54%;top:44%"></div>
+    <div class="stem" style="--stemrot:23deg;height:47%;left:63%;top:47%"></div>
+    <div class="leaf" style="left:35%;top:69%;--leafrot:-35deg"></div>
+    <div class="leaf" style="left:54%;top:73%;--leafrot:25deg"></div>
+    <div class="leaf" style="left:43%;top:61%;--leafrot:145deg"></div>
+    <div class="leaf" style="left:63%;top:64%;--leafrot:-25deg"></div>
+    <div class="wrap"></div><div class="ribbon"></div>
+  </div>
+  <div class="hint" id="hint" aria-label="Chạm màn hình để tạo thêm trái tim"><div class="pulse"></div></div>
+</div>
+<script>
+const scene=document.getElementById('scene'), bouquet=document.getElementById('bouquet');
+const palettes=[
+ ['#fff0f7','#ff7fb8','#d92570'],['#fff2f4','#ff9aab','#d93b66'],
+ ['#fff5ff','#d89bff','#8e3fc4'],['#fff3e9','#ffb66e','#e75b54'],
+ ['#fff4fb','#ff5ca8','#a90d55']
+];
+const flowers=[
+ [50,15,112,0],[32,25,98,-14],[67,26,100,12],[19,40,83,-18],[45,35,108,-4],[75,41,86,18],[30,48,88,-10],[60,49,92,12],[48,56,76,0]
+];
+flowers.forEach((f,i)=>{
+ const [x,y,s,r]=f,p=palettes[i%palettes.length];
+ const el=document.createElement('div');el.className='flower';
+ el.style.cssText=`--x:${x}%;--y:${y}%;--s:${s}px;--r:${r}deg;--d:${3+i*.27}s;--spin:${22+i*3}s`;
+ const stem=document.createElement('div');stem.className='stem';stem.style.cssText=`top:${y+7}%;left:${x}%;height:${Math.max(20,65-y)}%;--stemrot:${(x-50)*.55}deg`;
+ // Flower heads sit in front of the bouquet wrapping.
+ const petals=document.createElement('div');petals.className='petals';
+ for(let j=0;j<10;j++){const petal=document.createElement('i');petal.className='petal';petal.style.cssText=`--a:${j*36}deg;--c1:${p[0]};--c2:${p[1]};--c3:${p[2]}`;petals.appendChild(petal)}
+ const center=document.createElement('div');center.className='center';el.append(petals,center);bouquet.appendChild(el);
+});
+function heart(x,y,size=24,duration=4.5){
+ const h=document.createElement('div');h.className='heart';h.textContent=Math.random()>.24?'♥':'♡';
+ h.style.left=x+'px';h.style.top=y+'px';h.style.fontSize=size+'px';h.style.animationDuration=duration+'s';
+ scene.appendChild(h);setTimeout(()=>h.remove(),duration*1000);
+}
+function petal(){
+ const p=document.createElement('div');p.className='petal-fall';p.textContent=['✿','❀','♥','♡'][Math.floor(Math.random()*4)];
+ p.style.left=Math.random()*100+'%';p.style.animationDuration=(7+Math.random()*8)+'s';p.style.fontSize=(13+Math.random()*20)+'px';
+ scene.appendChild(p);setTimeout(()=>p.remove(),16000);
+}
+for(let i=0;i<22;i++)setTimeout(()=>heart(Math.random()*innerWidth,innerHeight*(.3+Math.random()*.7),12+Math.random()*25,5+Math.random()*5),i*180);
+setInterval(petal,520);
+setInterval(()=>heart(Math.random()*innerWidth,innerHeight+20,12+Math.random()*22,5+Math.random()*4),430);
+const canvas=document.getElementById('stars'),ctx=canvas.getContext('2d');let stars=[];
+function resize(){canvas.width=innerWidth*devicePixelRatio;canvas.height=innerHeight*devicePixelRatio;ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);stars=Array.from({length:Math.min(110,Math.floor(innerWidth*innerHeight/7500))},()=>({x:Math.random()*innerWidth,y:Math.random()*innerHeight,r:Math.random()*1.6+.3,a:Math.random(),v:Math.random()*.018+.004}))}
+function draw(){ctx.clearRect(0,0,innerWidth,innerHeight);for(const s of stars){s.a+=s.v;if(s.a>1||s.a<0)s.v*=-1;ctx.globalAlpha=Math.max(.15,Math.abs(Math.sin(s.a*Math.PI)));ctx.fillStyle='#ffe9f5';ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fill()}ctx.globalAlpha=1;requestAnimationFrame(draw)}
+addEventListener('resize',resize);resize();draw();
+document.getElementById('hint').addEventListener('pointerdown',e=>{
+ for(let i=0;i<18;i++){const a=Math.PI*2*i/18,dist=25+Math.random()*90;heart(e.clientX+Math.cos(a)*dist,e.clientY+Math.sin(a)*dist,16+Math.random()*22,2.2+Math.random()*2)}
+ const pulse=document.querySelector('.pulse');pulse.style.animation='none';void pulse.offsetWidth;pulse.style.animation='ripple 1.1s ease-out';
+});
+</script>
+</body>
+</html>
