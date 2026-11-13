@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="theme-color" content="#050509">
+<title>Gửi Ngọc ♡</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; }
+  body {
+    background: radial-gradient(ellipse at 50% 42%, #21101d 0%, #0c0810 48%, #030306 100%);
+    color: #fff; font-family: Georgia, "Times New Roman", serif;
+    touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+    user-select: none;
+  }
+  .glow {
+    position: fixed; inset: -20%; pointer-events: none; opacity: .55;
+    background: radial-gradient(circle at 50% 50%, rgba(255,75,145,.13), transparent 38%);
+    animation: breathe 5s ease-in-out infinite alternate;
+  }
+  @keyframes breathe { to { transform: scale(1.18); opacity: .85; } }
+  main {
+    position: relative; z-index: 1; height: 100%; display: flex;
+    flex-direction: column; justify-content: center; align-items: center;
+    text-align: center; padding: 28px;
+  }
+  .eyebrow {
+    color: #e8a9c5; letter-spacing: .28em; text-transform: uppercase;
+    font: 11px/1.5 Arial, sans-serif; margin-bottom: 18px; opacity: .85;
+  }
+  h1 {
+    margin: 0; font-size: clamp(35px, 9vw, 66px); font-weight: 400;
+    line-height: 1.12; text-shadow: 0 0 30px rgba(255,95,160,.25);
+  }
+  .heart {
+    display: inline-block; color: #ff6b9d; font-family: Arial, sans-serif;
+    font-size: .8em; margin-top: 24px;
+    filter: drop-shadow(0 0 15px rgba(255,83,145,.6));
+    animation: pulse 1.8s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.18); } }
+  .hint {
+    position: absolute; bottom: max(35px, env(safe-area-inset-bottom));
+    color: rgba(255,255,255,.56); font: 12px Arial, sans-serif;
+    letter-spacing: .08em; animation: hint 2.4s ease-in-out infinite;
+  }
+  @keyframes hint { 50% { opacity: .35; } }
+  .particle {
+    position: fixed; left: 0; top: 0; z-index: 5; pointer-events: none;
+    transform: translate(-50%,-50%); will-change: transform, opacity;
+    animation: floatUp var(--duration, 1.25s) cubic-bezier(.16,.72,.25,1) forwards;
+    filter: drop-shadow(0 0 9px rgba(255,83,145,.55));
+  }
+  @keyframes floatUp {
+    0% { opacity: 0; transform: translate(-50%,-35%) scale(.35) rotate(var(--rot)); }
+    15% { opacity: 1; }
+    100% { opacity: 0; transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(var(--scale)) rotate(calc(var(--rot) + 35deg)); }
+  }
+  .spark {
+    position: fixed; width: 5px; height: 5px; border-radius: 50%;
+    background: #ffd5e5; box-shadow: 0 0 12px 3px rgba(255,132,180,.7);
+    pointer-events: none; z-index: 4;
+    animation: sparkle .75s ease-out forwards;
+  }
+  @keyframes sparkle {
+    from { opacity: 1; transform: translate(0,0) scale(1); }
+    to { opacity: 0; transform: translate(var(--sx),var(--sy)) scale(0); }
+  }
+  .tap-ring {
+    position: fixed; width: 24px; height: 24px; border: 1px solid rgba(255,164,198,.8);
+    border-radius: 50%; pointer-events: none; z-index: 3;
+    transform: translate(-50%,-50%); animation: ring .65s ease-out forwards;
+  }
+  @keyframes ring { to { width: 110px; height: 110px; opacity: 0; border-color: rgba(255,164,198,0); } }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
+  }
+</style>
+</head>
+<body>
+<div class="glow"></div>
+<main id="scene">
+  <div class="eyebrow">a little thing for you</div>
+  <h1>Gửi Ngọc,<br>một chút yêu thương</h1>
+  <div class="heart">♥</div>
+  <div class="hint">chạm vào màn hình nhé</div>
+</main>
+<script>
+(() => {
+  const colors = ["#ff6b9d", "#ff8bb4", "#ffc1d6", "#ffffff", "#e9a7ff"];
+  let lastTouch = 0;
+  function burst(x, y) {
+    const ring = document.createElement("i");
+    ring.className = "tap-ring";
+    ring.style.left = x + "px"; ring.style.top = y + "px";
+    document.body.appendChild(ring);
+    ring.addEventListener("animationend", () => ring.remove(), { once: true });
+
+    const count = 9;
+    for (let i = 0; i < count; i++) {
+      const p = document.createElement("span");
+      p.className = "particle";
+      p.textContent = Math.random() > .18 ? "♥" : "✦";
+      const angle = Math.PI * 2 * i / count + Math.random() * .45;
+      const distance = 35 + Math.random() * 65;
+      p.style.left = x + "px"; p.style.top = y + "px";
+      p.style.color = colors[Math.floor(Math.random() * colors.length)];
+      p.style.fontSize = (13 + Math.random() * 19) + "px";
+      p.style.setProperty("--dx", Math.cos(angle) * distance + "px");
+      p.style.setProperty("--dy", (Math.sin(angle) * distance - 35) + "px");
+      p.style.setProperty("--duration", (0.9 + Math.random() * .65) + "s");
+      p.style.setProperty("--scale", (.65 + Math.random() * .8).toFixed(2));
+      p.style.setProperty("--rot", (Math.random() * 50 - 25) + "deg");
+      document.body.appendChild(p);
+      p.addEventListener("animationend", () => p.remove(), { once: true });
+    }
+    for (let i = 0; i < 7; i++) {
+      const s = document.createElement("i");
+      const a = Math.random() * Math.PI * 2, d = 20 + Math.random() * 65;
+      s.className = "spark"; s.style.left = x + "px"; s.style.top = y + "px";
+      s.style.setProperty("--sx", Math.cos(a) * d + "px");
+      s.style.setProperty("--sy", Math.sin(a) * d + "px");
+      document.body.appendChild(s);
+      s.addEventListener("animationend", () => s.remove(), { once: true });
+    }
+  }
+  document.addEventListener("pointerdown", e => {
+    const now = Date.now();
+    if (e.pointerType === "touch" && now - lastTouch < 350) return;
+    if (e.pointerType === "touch") lastTouch = now;
+    burst(e.clientX, e.clientY);
+  }, { passive: true });
+})();
+</script>
+</body>
+</html>
